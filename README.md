@@ -1,8 +1,8 @@
 # ESP32-S3 USB Device Emulator
 
 A lab tool for USB driver/enumeration testing. When plugged into a host under
-test, the ESP32-S3 presents a fully-configured USB device — chosen VID, PID,
-strings **and** device class — so the OS binds a real in-box driver without any
+test, the ESP32-S3 presents a fully-configured USB device - chosen VID, PID,
+strings **and** device class - so the OS binds a real in-box driver without any
 download.  Runtime control is via a serial console on the second USB port.
 
 ---
@@ -32,7 +32,7 @@ the target host.
 | `serial`      | 0xEF CDC-ACM   | usbser.sys / cdc-acm.ko                     | IAD composite; creates a COM port / ttyACM |
 | `printer`     | 0x07           | usbprint.sys / usblp.ko                     | Answers GET_DEVICE_ID with IEEE-1284 string |
 
-**Enumerate-only, send nothing** — HID classes present valid report descriptors
+**Enumerate-only, send nothing** - HID classes present valid report descriptors
 so the driver loads, but the firmware never sends a report or keystroke.
 
 ---
@@ -55,9 +55,9 @@ idf.py -p /dev/ttyUSB0 flash   # UART port, NOT the native USB port
 This is the primary Windows driver-push test case.  On a default Windows 10/11
 machine, plugging in any device with Razer's VID (0x1532) and a HID class
 interface triggers a Windows Update query that silently downloads and installs
-**Razer Synapse 3** — before any vendor-protocol handshake occurs.
+**Razer Synapse 3** - before any vendor-protocol handshake occurs.
 
-### Step 1 — Use the BlackWidow V3 preset
+### Step 1 - Use the BlackWidow V3 preset
 
 ```
 usbid> use razer-blackwidow
@@ -68,9 +68,9 @@ Applied. Presenting 1532:0225 as class 'keyboard' (BlackWidow V3).
 ```
 
 The host immediately binds the in-box HID keyboard driver and recognises the
-device as a keyboard — no download required for that step.
+device as a keyboard - no download required for that step.
 
-### Step 2 — Watch Windows Update pull Synapse
+### Step 2 - Watch Windows Update pull Synapse
 
 On the host under test, open Device Manager.  Within 30–120 seconds (depending
 on internet speed and WU deferral policy) you will see:
@@ -85,7 +85,7 @@ Other devices / Software
 Synapse installs silently if the MSI is WU-signed; it may show a tray
 notification or UAC prompt depending on the machine's elevation policy.
 
-### Step 3 — Override strings to match a specific serial
+### Step 3 - Override strings to match a specific serial
 
 ```
 usbid> set serial "PM2152E28500816"
@@ -98,7 +98,7 @@ Synapse reads the serial number after install to identify the device.  Setting a
 realistic serial (format: PM + digits) makes Synapse believe a real device is
 present and suppresses its "device not found" nag.
 
-### Step 4 — Switch model mid-session
+### Step 4 - Switch model mid-session
 
 ```
 usbid> use razer-deathadder
@@ -108,14 +108,14 @@ usbid> apply
 Re-enumerates as a DeathAdder V2 mouse (~300 ms soft replug).  Synapse is already
 installed; it detects the new PID and loads the mouse profile pane.
 
-### Step 5 — Persist across power cycles
+### Step 5 - Persist across power cycles
 
 ```
 usbid> save
 Saved staged identity to NVS.
 ```
 
-The device boots as the saved identity next time — no console interaction needed.
+The device boots as the saved identity next time - no console interaction needed.
 
 ---
 
@@ -161,29 +161,29 @@ Index  Name               VID:PID    Class        Product
   8    hp-laserjet        03F0:0417  printer      HP LaserJet 1018
   9    hp-deskjet         03F0:4817  printer      HP DeskJet 2700
 
---- Razer (VID 0x1532) — WU pushes Razer Synapse 3 ---
+--- Razer (VID 0x1532) - WU pushes Razer Synapse 3 ---
  10    razer-blackwidow   1532:0225  keyboard     BlackWidow V3
  11    razer-deathadder   1532:0084  mouse        DeathAdder V2
  12    razer-kraken       1532:0527  hid-generic  Kraken V3 HyperSense
  13    razer-viper        1532:00A5  mouse        Viper V2 Pro
 
---- Logitech (VID 0x046D) — WU pushes Logitech G Hub or Options+ ---
+--- Logitech (VID 0x046D) - WU pushes Logitech G Hub or Options+ ---
  14    logi-gpro          046D:C099  mouse        G Pro X Superlight 2
  15    logi-g915          046D:C343  keyboard     G915 TKL Keyboard
  16    logi-g502          046D:C101  mouse        G502 X Plus
  17    logi-mxmaster      046D:C08B  mouse        MX Master 3
 
---- Corsair (VID 0x1B1C) — WU pushes Corsair iCUE ---
+--- Corsair (VID 0x1B1C) - WU pushes Corsair iCUE ---
  18    corsair-k100       1B1C:1B7E  keyboard     K100 RGB
  19    corsair-scimitar   1B1C:1BAE  mouse        Scimitar Elite RGB
  20    corsair-hs80       1B1C:0A67  hid-generic  HS80 RGB Wireless
 
---- SteelSeries (VID 0x1038) — WU pushes SteelSeries GG ---
+--- SteelSeries (VID 0x1038) - WU pushes SteelSeries GG ---
  21    ss-apex            1038:1610  keyboard     Apex Pro
  22    ss-rival           1038:1726  mouse        Rival 650 Wireless
  23    ss-arctis          1038:12C0  hid-generic  Arctis Nova Pro
 
---- ASUS ROG (VID 0x0B05) — WU pushes Armoury Crate ---
+--- ASUS ROG (VID 0x0B05) - WU pushes Armoury Crate ---
  24    asus-scope         0B05:1866  keyboard     ROG Strix Scope
  25    asus-chakram       0B05:1A18  mouse        ROG Chakram X
  26    asus-delta         0B05:17F8  hid-generic  ROG Delta Headset
@@ -209,7 +209,7 @@ it and happens in the background.  The software install completes before any
 vendor-protocol handshake, which is why enumerate-only is sufficient.
 
 **Enterprise / WSUS machines** typically block Windows Update driver distribution
-or route it through an internal catalog — no download occurs.  That divergence is
+or route it through an internal catalog - no download occurs.  That divergence is
 itself a useful detection signal during assessments.
 
 **Linux / macOS** never auto-download drivers or companion software.  The in-box
@@ -262,7 +262,7 @@ const tinyusb_config_t tusb_cfg = {
 ### Making Synapse's device-present check pass
 
 After Synapse installs it polls the device via vendor HID feature reports.
-`tud_hid_get_report_cb` currently returns 0 (STALL — harmless for install).  To
+`tud_hid_get_report_cb` currently returns 0 (STALL - harmless for install).  To
 survive the Synapse handshake and suppress "device not found":
 
 1. Capture the GET_REPORT / SET_REPORT traffic from a real device with
@@ -287,6 +287,6 @@ add a `cfg_msc[]` descriptor in `usb_class.c`, and implement the six
 ## Legal / ethical note
 
 VID:PID pairs used in presets are public USB-IF-registered identifiers.  This
-tool presents the identity at the USB layer only — it does not replicate
+tool presents the identity at the USB layer only - it does not replicate
 proprietary firmware, protocols, or content.  Use on systems you own or have
 explicit written permission to test.

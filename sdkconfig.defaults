@@ -1,0 +1,18 @@
+# Target
+CONFIG_IDF_TARGET="esp32s3"
+
+# Single large app + NVS, no OTA.
+CONFIG_PARTITION_TABLE_SINGLE_APP_LARGE=y
+CONFIG_ESPTOOLPY_FLASHSIZE_4MB=y
+
+# Console on UART0 (the DevKitC "UART" port / bridge chip).
+CONFIG_ESP_CONSOLE_UART_DEFAULT=y
+
+# --- TinyUSB class drivers to compile in ---
+# All active-at-once class drivers must be built even though only one class is
+# presented per enumeration. HID covers keyboard/mouse/generic; CDC covers the
+# serial profiles. Printer + vendor-identity are handled by usb_app_driver.c
+# (a custom class driver), so no MSC/vendor Kconfig is required here.
+CONFIG_TINYUSB_HID_ENABLED=y
+CONFIG_TINYUSB_CDC_ENABLED=y
+CONFIG_TINYUSB_MSC_ENABLED=n
